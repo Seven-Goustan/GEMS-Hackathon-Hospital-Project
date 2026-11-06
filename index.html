@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital Patient Health System</title>
+  <style>
+    :root {
+      --ink: #000;
+      --paper: #fff;
+    }
+
+    /* !important so browser defaults on buttons and selects can't bring back
+       rounded corners or shadows - the whole page is meant to look flat */
+    * {
+      box-sizing: border-box;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    body {
+      margin: 20px;
+      padding: 0;
+      background-color: #f0f0f0;
+      color: var(--ink);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 3px solid var(--ink);
+      background: var(--paper);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      text-transform: uppercase;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid var(--ink);
+    }
+
+    .team-bar {
+      margin-bottom: 15px;
+      padding: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 12px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 2px solid var(--ink);
+      background: #fafafa;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-item {
+      padding: 8px;
+      border: 1px solid var(--ink);
+      background: var(--paper);
+    }
+
+    /* undo the block label above so the text sits next to its tick box */
+    .checkbox-item label {
+      display: inline;
+      font-weight: normal;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    /* .result-box, .card and the list styles aren't used on the empty form -
+       they style the plan markup the server puts in place of the placeholder */
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      border: 3px solid var(--ink);
+      background: var(--paper);
+    }
+
+    .card {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 2px solid var(--ink);
+      background: #f9f9f9;
+    }
+
+    ul {
+      margin: 5px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      list-style-type: square;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Hospital Patient Care Generator</h1>
+    <div class="team-bar">
+      WSD Hackathon team!: Zakariya Nafeez (project manager), Sheheryar(frontend), Zarrar umar (backend, medical knowledge), Umar atif (backend)
+    </div>
+    <p>Select patient parameters and health issues to generate tailored fitness, diet, and mental health plans.</p>
+  </div>
+
+  <!-- the option/checkbox values are the keys the backend looks up, so change
+       the visible text freely but keep the values in sync with the server -->
+  <form method="POST" action="/">
+    <div class="section">
+      <h3>1. Patient Demographics & Baseline</h3>
+
+      <label for="age">Age Group:</label>
+      <select id="age" name="age">
+        <option value="youth">Youth (Under 18)</option>
+        <option value="adult" selected>Adult (18–64)</option>
+        <option value="senior">Senior (65+)</option>
+      </select>
+
+      <label for="activity">Baseline Activity Level:</label>
+      <select id="activity" name="activity">
+        <option value="sedentary">Sedentary (Little or no exercise)</option>
+        <option value="moderate">Moderate (1-3 days/week)</option>
+        <option value="active">Active (4+ days/week)</option>
+      </select>
+    </div>
+
+    <!-- every box shares name="physical" (and "mental" below) so the server
+         gets all the ticked ones as a single list -->
+    <div class="section">
+      <h3>2. Physical Health Conditions</h3>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <input type="checkbox" id="p1" name="physical" value="hypertension">
+          <label for="p1">Hypertension</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="p2" name="physical" value="diabetes">
+          <label for="p2">Type 2 Diabetes</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="p3" name="physical" value="joint_pain">
+          <label for="p3">Joint Pain / Arthritis</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="p4" name="physical" value="acid_reflux">
+          <label for="p4">Acid Reflux / GERD</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>3. Mental Health & Fatigue Symptoms</h3>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <input type="checkbox" id="m1" name="mental" value="fatigue">
+          <label for="m1">Chronic Fatigue</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="m2" name="mental" value="anxiety">
+          <label for="m2">Anxiety / Stress</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="m3" name="mental" value="insomnia">
+          <label for="m3">Insomnia / Sleep Issues</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="m4" name="mental" value="brain_fog">
+          <label for="m4">Brain Fog</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="m5" name="mental" value="burnout">
+          <label for="m5">Burnout</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Generate Plan (Python Processing)</button>
+  </form>
+
+  <!-- the server swaps the next line for the generated plan - keep it exactly as it is -->
+  <!-- RESULTS_PLACEHOLDER -->
+
+</div>
+
+</body>
+</html>
